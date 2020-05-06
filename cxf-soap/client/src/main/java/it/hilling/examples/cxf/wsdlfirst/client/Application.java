@@ -36,6 +36,8 @@ import java.util.Set;
 @SpringBootApplication
 public class Application extends RouteBuilder {
 
+    private static final String OP_NAMESPACE="http://customerservice.hilling.it/";
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -56,6 +58,7 @@ public class Application extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
+
         LOG.info("Starting client routes");
 
         // Fire off all the tests.
@@ -69,14 +72,14 @@ public class Application extends RouteBuilder {
                 .log("SUCCESS: NotFoundTest - NoSuchCustomerException detected.")
                 .handled(true)
                 .end()
-                .setHeader(CxfConstants.OPERATION_NAMESPACE, simple("http://customerservice.notsoclever.cc/"))
+                .setHeader(CxfConstants.OPERATION_NAMESPACE, simple(OP_NAMESPACE))
                 .setHeader(CxfConstants.OPERATION_NAME, simple("getCustomersByName"))
                 .setBody(simple("Walker"))
                 .to("cxf:bean:customerServiceEndpoint");
 
         // Test getCustomersByName
         from("direct:getCustomersTest")
-                .setHeader(CxfConstants.OPERATION_NAMESPACE, simple("http://customerservice.notsoclever.cc/"))
+                .setHeader(CxfConstants.OPERATION_NAMESPACE, simple(OP_NAMESPACE))
                 .setHeader(CxfConstants.OPERATION_NAME, simple("getCustomersByName"))
                 .setBody(simple("Johns"))
                 .to("cxf:bean:customerServiceEndpoint")
@@ -86,7 +89,7 @@ public class Application extends RouteBuilder {
                     @SuppressWarnings("unchecked")
                     List<Customer> customers = (List<Customer>) contents.get(0);
                     Assert.assertEquals(2, customers.size());
-                    Set<String> customerNames = new HashSet<String>();
+                    Set<String> customerNames = new HashSet<>();
                     for (Customer customer : customers) {
                         customerNames.add(customer.getName());
                     }
@@ -98,7 +101,7 @@ public class Application extends RouteBuilder {
         // Test updateCustomer
         // 1 - Get a customer and set a new value for number of orders
         from("direct:updateCustomerTest")
-                .setHeader(CxfConstants.OPERATION_NAMESPACE, simple("http://customerservice.notsoclever.cc/"))
+                .setHeader(CxfConstants.OPERATION_NAMESPACE, simple(OP_NAMESPACE))
                 .setHeader(CxfConstants.OPERATION_NAME, simple("getCustomersByName"))
                 .setBody(simple("Jones"))
                 .to("cxf:bean:customerServiceEndpoint")
@@ -113,7 +116,7 @@ public class Application extends RouteBuilder {
 
         // 2 - Send the updated customer to updateCustomer
         from("direct:sendUpdate")
-                .setHeader(CxfConstants.OPERATION_NAMESPACE, simple("http://customerservice.notsoclever.cc/"))
+                .setHeader(CxfConstants.OPERATION_NAMESPACE, simple(OP_NAMESPACE))
                 .setHeader(CxfConstants.OPERATION_NAME, simple("updateCustomer"))
                 .to("cxf:bean:customerServiceEndpoint")
                 .to("direct:confirmUpdate");

@@ -19,7 +19,6 @@
 package it.hilling.examples.cxf.wsdlfirst.server;
 
 import it.hilling.customerservice.Customer;
-import it.hilling.customerservice.CustomerService;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
@@ -34,7 +33,7 @@ public class CustomerServiceProcessor implements Processor {
     private static final transient Logger LOG = LoggerFactory.getLogger(CustomerServiceProcessor.class);
 
     @Autowired
-    CustomerServiceImpl customerService;
+    BackendService backendService;
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -43,18 +42,14 @@ public class CustomerServiceProcessor implements Processor {
 
         if ("getCustomersByName".equals(operationName)) {
             String name = inMessage.getBody(String.class);
-            LOG.info("getCustomersByName called with: " + name);
-            List<Customer> customers = customerService.getCustomersByName(name);
+            LOG.info("getCustomersByName called with {}", name);
+            List<Customer> customers = backendService.getCustomersByName(name);
             exchange.getOut().setBody(new Object[] {customers});
         } else if ("updateCustomer".equals(operationName)) {
             LOG.info("updateCustomer called");
-            Customer customer = inMessage.getBody(Customer.class);
-            customer = customerService.updateCustomer(customer);
+            Customer customer = backendService.updateCustomer(inMessage.getBody(Customer.class));
             exchange.getOut().setBody(customer);
         }
     }
 
-    public void setCustomerService(CustomerServiceImpl customerService) {
-        this.customerService = customerService;
-    }
 }

@@ -50,8 +50,8 @@ public class WebServiceConfig {
     }
     
     @Bean
-    public CustomerServiceImpl customerService()
+    public BackendService customerService()
     {
-    	return new CustomerServiceImpl();
+    	return new BackendService();
     }
 }
