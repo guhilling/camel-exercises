@@ -1,6 +1,6 @@
 package it.hilling.examples.cxf.wsdlfirst.client;
 
-/**
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE
  * file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file
  * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the
@@ -37,6 +37,8 @@ import java.util.Set;
 public class Application extends RouteBuilder {
 
     private static final String OP_NAMESPACE="http://customerservice.hilling.it/";
+    public static final String BY_NAME = "getCustomersByName";
+    public static final String CUSTOMER_SERVICE_ENDPOINT = "cxf:bean:customerServiceEndpoint";
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -53,10 +55,10 @@ public class Application extends RouteBuilder {
     }
 
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(Application.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
 
         LOG.info("Starting client routes");
@@ -73,16 +75,16 @@ public class Application extends RouteBuilder {
                 .handled(true)
                 .end()
                 .setHeader(CxfConstants.OPERATION_NAMESPACE, simple(OP_NAMESPACE))
-                .setHeader(CxfConstants.OPERATION_NAME, simple("getCustomersByName"))
+                .setHeader(CxfConstants.OPERATION_NAME, simple(BY_NAME))
                 .setBody(simple("Walker"))
-                .to("cxf:bean:customerServiceEndpoint");
+                .to(CUSTOMER_SERVICE_ENDPOINT);
 
         // Test getCustomersByName
         from("direct:getCustomersTest")
                 .setHeader(CxfConstants.OPERATION_NAMESPACE, simple(OP_NAMESPACE))
-                .setHeader(CxfConstants.OPERATION_NAME, simple("getCustomersByName"))
+                .setHeader(CxfConstants.OPERATION_NAME, simple(BY_NAME))
                 .setBody(simple("Johns"))
-                .to("cxf:bean:customerServiceEndpoint")
+                .to(CUSTOMER_SERVICE_ENDPOINT)
                 .process(exchange -> {
                     MessageContentsList contents = exchange.getIn().getBody(MessageContentsList.class);
 
@@ -102,13 +104,13 @@ public class Application extends RouteBuilder {
         // 1 - Get a customer and set a new value for number of orders
         from("direct:updateCustomerTest")
                 .setHeader(CxfConstants.OPERATION_NAMESPACE, simple(OP_NAMESPACE))
-                .setHeader(CxfConstants.OPERATION_NAME, simple("getCustomersByName"))
+                .setHeader(CxfConstants.OPERATION_NAME, simple(BY_NAME))
                 .setBody(simple("Jones"))
-                .to("cxf:bean:customerServiceEndpoint")
+                .to(CUSTOMER_SERVICE_ENDPOINT)
                 .process(exchange -> {
                     MessageContentsList contents = exchange.getIn().getBody(MessageContentsList.class);
-                    List customers = (List) contents.get(0);
-                    Customer customer = (Customer) customers.get(0);
+                    List<Customer> customers = (List<Customer>) contents.get(0);
+                    Customer customer = customers.get(0);
                     customer.setNumOrders(99);
                     exchange.getIn().setBody(customer);
                 })
@@ -118,7 +120,7 @@ public class Application extends RouteBuilder {
         from("direct:sendUpdate")
                 .setHeader(CxfConstants.OPERATION_NAMESPACE, simple(OP_NAMESPACE))
                 .setHeader(CxfConstants.OPERATION_NAME, simple("updateCustomer"))
-                .to("cxf:bean:customerServiceEndpoint")
+                .to(CUSTOMER_SERVICE_ENDPOINT)
                 .to("direct:confirmUpdate");
 
         // 3 - Retrieve the results of the update and confirm that the values are set

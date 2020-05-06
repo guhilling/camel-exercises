@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -72,7 +72,7 @@ public class BackendService {
         Customer customer = new Customer();
         customer.setName(name);
         customer.getAddress().add(address);
-        Date bDate = new GregorianCalendar(2009, 1, 1).getTime();
+        Date bDate = new GregorianCalendar(2009, Calendar.JANUARY, 1).getTime();
         customer.setBirthDate(bDate);
         customer.setNumOrders(1);
         customer.setRevenue(revenue);
