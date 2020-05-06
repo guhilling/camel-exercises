@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
@@ -30,7 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 public class CustomerServiceProcessor implements Processor {
-    private static final transient Logger LOG = LoggerFactory.getLogger(CustomerServiceProcessor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CustomerServiceProcessor.class);
 
     @Autowired
     BackendService backendService;
