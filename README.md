@@ -6,3 +6,10 @@ Voraussetzungen:
 - Maven
 - git
 - oc client
+
+Aufgabe 1:
+
+Entwickelt den "client" im cxf-soap-Projekt so weiter, dass
+er eine REST-Schnittstelle zum Zugriff auf eine der beiden
+Methoden des SOAP-Services bereitstellt!
+

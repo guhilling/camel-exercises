@@ -49,6 +49,8 @@ public class CustomerServiceProcessor implements Processor {
             LOG.info("updateCustomer called");
             Customer customer = backendService.updateCustomer(inMessage.getBody(Customer.class));
             exchange.getOut().setBody(customer);
+        } else {
+            throw new RuntimeException("no such operation " + operationName);
         }
     }
 
