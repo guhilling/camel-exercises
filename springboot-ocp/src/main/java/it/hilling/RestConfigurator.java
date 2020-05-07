@@ -22,11 +22,17 @@ public class RestConfigurator extends RouteBuilder {
 
 	@Override
 	public void configure() {
-		final List<ConfigMap> configMap = client.configMaps()
-												.list().getItems();
-		configMap.forEach(
-				cm -> log.info("found cm {}", cm.getMetadata().getName())
-		);
+		try {
+			final List<ConfigMap> configMap = client.configMaps()
+													.list()
+													.getItems();
+			configMap.forEach(
+					cm -> log.info("found cm {}", cm.getMetadata()
+													.getName())
+			);
+		} catch (RuntimeException re) {
+			log.error("cannot list configmap", re);
+		}
 
 		restConfiguration()
 		.component("servlet")

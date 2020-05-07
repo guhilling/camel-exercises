@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: springboot-ocp
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
+        period: 5000
