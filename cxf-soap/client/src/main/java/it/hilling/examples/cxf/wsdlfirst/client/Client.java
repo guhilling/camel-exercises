@@ -63,6 +63,22 @@ public class Client extends RouteBuilder {
 
         LOG.info("Starting client routes");
 
+        restConfiguration()
+                .component("spark-rest")
+                .port(8090);
+
+        rest("/customers/")
+                .get("/byname/{name}")
+                .to("direct:getcustomers");
+
+        from("direct:getcustomers")
+                .setHeader(CxfConstants.OPERATION_NAMESPACE, simple(OP_NAMESPACE))
+                .setHeader(CxfConstants.OPERATION_NAME, simple(BY_NAME))
+                .log("header: ${header.name}")
+                .setBody(simple("${header.name}"))
+                .to(CUSTOMER_SERVICE_ENDPOINT);
+
+
         // Fire off all the tests.
         from("timer://NotFoundTest?repeatCount=1")
                 .multicast()
