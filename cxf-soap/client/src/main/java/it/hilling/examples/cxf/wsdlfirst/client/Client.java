@@ -34,14 +34,14 @@ import java.util.Set;
  * A spring-boot application that includes a Camel route builder to setup the Camel routes
  */
 @SpringBootApplication
-public class Application extends RouteBuilder {
+public class Client extends RouteBuilder {
 
     private static final String OP_NAMESPACE="http://customerservice.hilling.it/";
     public static final String BY_NAME = "getCustomersByName";
     public static final String CUSTOMER_SERVICE_ENDPOINT = "cxf:bean:customerServiceEndpoint";
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(Client.class, args);
     }
     
     @Bean
@@ -55,7 +55,7 @@ public class Application extends RouteBuilder {
     }
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(Application.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Client.class);
 
     @Override
     public void configure() {
