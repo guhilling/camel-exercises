@@ -4,5 +4,4 @@ metadata:
   # Must match the 'spring.application.name' property of the application
   name: springboot-ocp
 data:
-  application.properties: |
-    sample.info-message=hello
+  sample.info-message: Hallo Welt
