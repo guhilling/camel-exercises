@@ -34,7 +34,7 @@ hello
 Zur Anpassung legen wir eine ConfigMap an und rollen neu aus:
 
 ```bash
-$ oc create -f oc create -f src/test/resources/configmap.yml
+$ oc create -f src/test/resources/configmap.yml
 $ oc rollout latest openshift-ocp
 ```
 Ergebnis: keine Änderung.
