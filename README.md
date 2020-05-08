@@ -35,7 +35,7 @@ Zur Anpassung legen wir eine ConfigMap an und rollen neu aus:
 
 ```bash
 $ oc create -f src/test/resources/configmap.yml
-$ oc rollout latest openshift-ocp
+$ oc rollout latest springboot-ocp
 ```
 Ergebnis: keine Änderung.
 
@@ -44,7 +44,7 @@ Um das zu beheben, müssen wir ihm mehr Rechte einräumen:
 
 ```bash
 $ oc policy add-role-to-user view -z default
-$ oc rollout latest openshift-ocp
+$ oc rollout latest springboot-ocp
 ```
 Wenn der Rollout abgeschlossen ist, wird die
 konfigurierte Nachricht in der Map zurückgeliefert werden.
