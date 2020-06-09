@@ -1,54 +1,51 @@
 # Additional Examples for Red Hat Fuse/Apache Camel training
 
-## Voraussetzungen:
+## You need:
 - (IDE)
-- JDK8 für die Projekte
-- JDK11 für das fabric8-plugin/openshift
+- JDK8 for the projects
+- JDK11 for fabric8-plugin/openshift
 - Maven
 - git
 - oc client
 
-## Aufgabe 1:
+## Task 1:
 
-Entwickelt den "client" im cxf-soap-Projekt so weiter, dass
-er eine REST-Schnittstelle zum Zugriff auf eine der beiden
-Methoden des SOAP-Services bereitstellt!
+Develop the "client" in the cxf-soap project,
+so that it provides a REST-Service to access one of
+the two methods of the backend SOAP-Services!
 
 
 ## Aufgabe 2:
 
-Deployed das Projekt openshift-ocp mit fabric8:
+Deploy the openshift-ocp project using fabric8:
 
 ```bash
 $ mvn fabric8:deploy
 ```
 
-Die URL könnt Ihr über __oc get route__ ermitteln.
-Es wird die default-Antwort geliefert:
+You can get the URL using __oc get route__ .
+Using the url you can query the default answer:
  
 ```bash
 $ curl <URL>/camel/ping
 hello
 ```
 
-Zur Anpassung legen wir eine ConfigMap an und rollen neu aus:
+For the configuration we create a ConfigMap and redeploy:
 
 ```bash
 $ oc create -f src/test/resources/configmap.yml
 $ oc rollout latest springboot-ocp
 ```
-Ergebnis: keine Änderung.
-
-Warum? Unser Pod darf nicht auf die ConfigMap zugreifen!
-Um das zu beheben, müssen wir ihm mehr Rechte einräumen:
+Result: no changes.
+Why? Our pod is not allowed to access the ConfigMap!
+We need to give it more privileges:
 
 ```bash
 $ oc policy add-role-to-user view -z default
 $ oc rollout latest springboot-ocp
 ```
-Wenn der Rollout abgeschlossen ist, wird die
-konfigurierte Nachricht in der Map zurückgeliefert werden.
-
+After the rollout finishes the newly configured message will be delivered.
 Ihr könnt den Rollout tracken:
 
 ```bash
