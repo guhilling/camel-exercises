@@ -15,7 +15,7 @@ so that it provides a REST-Service to access one of
 the two methods of the backend SOAP-Services!
 
 
-## Aufgabe 2:
+## Task 2:
 
 Deploy the openshift-ocp project using fabric8:
 
@@ -46,7 +46,7 @@ $ oc policy add-role-to-user view -z default
 $ oc rollout latest springboot-ocp
 ```
 After the rollout finishes the newly configured message will be delivered.
-Ihr könnt den Rollout tracken:
+You can track the rollout as follows:
 
 ```bash
 $ oc get pod -w
